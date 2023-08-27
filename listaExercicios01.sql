@@ -24,3 +24,7 @@ group by autores.id;
 select curso, COUNT(aluno_id) as qtd_alunos
 from matriculas 
 group by curso;
+
+select produto, AVG(receita) as media
+from vendas
+group by produto;
