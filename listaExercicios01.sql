@@ -40,3 +40,7 @@ inner join livros
 on autores.id = livros.autor_id
 group by autores.id
 having qtd_livros > 2;
+
+SELECT livros.titulo, autores.nome
+FROM livros
+INNER JOIN autores ON livros.autor_id = autores.id;
