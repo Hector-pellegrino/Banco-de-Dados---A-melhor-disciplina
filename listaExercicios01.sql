@@ -32,4 +32,11 @@ group by produto;
 select produto, SUM(receita) as receita
 from vendas
 group by produto
-having SUM(receita) > 10000;
+having receita > 10000;
+
+select autores.nome, COUNT(livros.id) as qtd_livros
+from autores
+inner join livros 
+on autores.id = livros.autor_id
+group by autores.id
+having qtd_livros > 2;
