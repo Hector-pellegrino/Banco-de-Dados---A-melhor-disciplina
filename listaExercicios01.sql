@@ -41,6 +41,10 @@ on autores.id = livros.autor_id
 group by autores.id
 having qtd_livros > 2;
 
-SELECT livros.titulo, autores.nome
-FROM livros
-INNER JOIN autores ON livros.autor_id = autores.id;
+select livros.titulo, autores.nome
+from livros
+inner join autores on livros.autor_id = autores.id;
+
+select alunos.nome, matriculas.curso
+from alunos
+inner join matriculas on alunos.id = matriculas.aluno_id; 
