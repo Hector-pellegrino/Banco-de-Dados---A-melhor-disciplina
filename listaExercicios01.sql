@@ -64,3 +64,11 @@ right join matriculas on alunos.id = matriculas.aluno_id;
 select alunos.nome, matriculas.curso
 from alunos
 inner join matriculas on alunos.id = matriculas.aluno_id; 
+
+select autores.nome, COUNT(livros.id) as qtd_livros
+from autores
+inner join livros 
+on autores.id = livros.autor_id
+group by autores.id
+order by qtd_livros desc
+limit 1;
