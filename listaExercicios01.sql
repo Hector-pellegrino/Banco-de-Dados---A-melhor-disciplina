@@ -10,3 +10,7 @@ select alunos.nome, matriculas.curso
 from alunos
 inner join matriculas 
 on alunos.id = matriculas.aluno_id and matriculas.curso = 'Engenharia de Software';
+
+select produto, SUM(receita) as receita_total
+from vendas
+group by produto;
