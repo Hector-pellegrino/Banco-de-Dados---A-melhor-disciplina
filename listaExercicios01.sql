@@ -28,3 +28,8 @@ group by curso;
 select produto, AVG(receita) as media
 from vendas
 group by produto;
+
+select produto, SUM(receita) as receita
+from vendas
+group by produto
+having SUM(receita) > 10000;
