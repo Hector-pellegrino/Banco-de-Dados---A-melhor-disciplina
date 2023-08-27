@@ -83,3 +83,8 @@ select autores.nome, COUNT(livros.id) * 20 AS receita_total
 from autores
 inner join livros on autores.id = livros.autor_id
 group by autores.id;
+
+select alunos.nome, COUNT(matriculas.id) as numero_de_matriculas
+from alunos
+left join matriculas on alunos.id = matriculas.aluno_id
+group by alunos.id;
