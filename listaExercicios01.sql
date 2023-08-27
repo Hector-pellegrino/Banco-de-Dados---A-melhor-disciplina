@@ -88,3 +88,8 @@ select alunos.nome, COUNT(matriculas.id) as numero_de_matriculas
 from alunos
 left join matriculas on alunos.id = matriculas.aluno_id
 group by alunos.id;
+
+select produto, COUNT(id) as qtd_transações 
+from vendas
+group by produto
+limit 1;
