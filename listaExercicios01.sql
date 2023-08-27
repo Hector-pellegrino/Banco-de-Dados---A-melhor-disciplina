@@ -72,3 +72,9 @@ on autores.id = livros.autor_id
 group by autores.id
 order by qtd_livros desc
 limit 1;
+
+select produto, MIN(receita) as receita
+from vendas
+group by produto
+order by receita asc
+limit 1;
