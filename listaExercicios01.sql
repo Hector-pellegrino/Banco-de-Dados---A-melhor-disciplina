@@ -14,3 +14,9 @@ on alunos.id = matriculas.aluno_id and matriculas.curso = 'Engenharia de Softwar
 select produto, SUM(receita) as receita_total
 from vendas
 group by produto;
+
+select autores.nome, COUNT(livros.id) as qtd_livros
+from autores
+left join livros 
+on autores.id = livros.autor_id
+group by autores.id;
