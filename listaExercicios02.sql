@@ -1,3 +1,4 @@
+-- exercicio 1
 delimiter //
 create procedure sp_ListarAutores ()
 begin
@@ -7,6 +8,7 @@ end;
 delimiter ;
 call sp_listarautores;
 
+-- exercicio 2
 delimiter //
 create procedure sp_LivrosPorCategoria(NomeCategoria VARCHAR(100))
 begin
@@ -18,7 +20,7 @@ end;
 delimiter ;
 call sp_LivrosPorCategoria('Romance');
 
-
+-- exercicio 3
 delimiter //
 create procedure sp_ContarLivrosPorCategoria(NomeCategoria VARCHAR(100))
 begin
@@ -31,24 +33,26 @@ end;
 delimiter ; 
 call sp_ContarLivrosPorCategoria('Romance');
 
+-- exercicio 4
 delimiter //
 create procedure sp_VerificarLivrosCategoria( IN NomeCategoria VARCHAR(100), OUT possui VARCHAR(100))
 begin
     DECLARE Quantidade INT;
-	SELECT COUNT(*) INTO Quantidade 
+    SELECT COUNT(*) INTO Quantidade 
     FROM Livro INNER JOIN Categoria 
     ON Categoria.Categoria_ID = Livro.Categoria_ID 
     WHERE Categoria.Nome = NomeCategoria 
     GROUP BY Nome;
     IF Quantidade > 0 THEN SET possui = 'Possui';
     ELSE SET possui = 'Não possui';
-	end if;
+    end if;
 end
 //
 delimiter ;
 call sp_VerificarLivrosCategoria('Palmeiras', @livros);
 SELECT @livros;
 
+-- exercicio 5
 delimiter //
 CREATE PROCEDURE sp_LivrosAteAno(IN ano INT)
 BEGIN
@@ -59,6 +63,7 @@ END //
 delimiter ;
 CALL sp_LivrosAteAno(2006);
 
+-- exercicio 6
 delimiter //
 create procedure sp_TitulosPorCategoria(NomeCategoria VARCHAR(100))
 begin
@@ -70,6 +75,7 @@ end;
 delimiter ;
 call sp_TitulosPorCategoria('Ciencia')
 
+-- exercicio 7
 delimiter //
 CREATE PROCEDURE sp_AdicionarLivro(IN Novo_Titulo VARCHAR(255), IN Novo_Editora_ID INT, IN Novo_Ano_Publicacao INT, IN Novo_Numero_Paginas INT, IN Novo_Categoria_ID INT, OUT resultado Varchar(100))
 begin 
@@ -87,6 +93,7 @@ delimiter ;
 CALL sp_AdicionarLivro('Livro Palmeiras', 1, 1914, 300, 4, @resultado);
 SELECT @resultado;
 
+-- exercicio 8
 delimiter //
 
 CREATE PROCEDURE sp_AutorMaisAntigo(OUT AutorMaisAntigo VARCHAR(255))
@@ -102,6 +109,7 @@ delimiter ;
 CALL sp_AutorMaisAntigo(@AutorMaisAntigo);
 SELECT @AutorMaisAntigo;
 
+-- exercicio 9
 delimiter //
 -- criando a procedure e colocando "AutorMaisAntigo" como parâmetro de saída
 CREATE PROCEDURE sp_AutorMaisAntigo(OUT AutorMaisAntigo VARCHAR(255)) 
@@ -116,3 +124,17 @@ BEGIN
 END //
 
 delimiter ;
+
+-- exercicio 10
+delimiter //
+
+CREATE PROCEDURE sp_LivrosESeusAutores()
+BEGIN
+    SELECT Livro.Titulo, Autor.Nome, Autor.Sobrenome
+    FROM Livro
+    INNER JOIN Autor_Livro ON Livro.Livro_ID = Autor_Livro.Livro_ID
+    INNER JOIN Autor ON Autor_Livro.Autor_ID = Autor.Autor_ID;
+END //
+
+delimiter ;
+CALL sp_LivrosESeusAutores();
