@@ -48,3 +48,13 @@ end
 delimiter ;
 call sp_VerificarLivrosCategoria('Palmeiras', @livros);
 SELECT @livros;
+
+DELIMITER //
+CREATE PROCEDURE sp_LivrosAteAno(IN ano INT)
+BEGIN
+select titulo as Livro, Ano_Publicacao
+from livro
+WHERE Ano_Publicacao <= ano;
+END //
+DELIMITER ;
+CALL sp_LivrosAteAno(2006);
