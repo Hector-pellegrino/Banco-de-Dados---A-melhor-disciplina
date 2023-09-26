@@ -99,7 +99,20 @@ BEGIN
 END //
 
 delimiter ;
-
 CALL sp_AutorMaisAntigo(@AutorMaisAntigo);
 SELECT @AutorMaisAntigo;
 
+delimiter //
+-- criando a procedure e colocando "AutorMaisAntigo" como parâmetro de saída
+CREATE PROCEDURE sp_AutorMaisAntigo(OUT AutorMaisAntigo VARCHAR(255)) 
+BEGIN
+-- declarei a variável "data_nasc" e depois guardei dentro dela a data de nascimento mais antiga registrada na tabela autor utilizando a função de agregação "MIN()" que encontra o menor valor
+    DECLARE data_nasc DATE;
+    SELECT MIN(Data_Nascimento) INTO data_nasc FROM Autor;
+-- selecionei o nome do autor quando a data de nascimento dele for igual a variável "data_nasc" (que contém a data de nascimento mais antiga) e guardei dentro do parâmetro de saída para que seja o resultado quando a stored procedure for chamada 
+    SELECT Nome INTO AutorMaisAntigo
+    FROM Autor
+    WHERE Data_Nascimento = data_nasc;
+END //
+
+delimiter ;
