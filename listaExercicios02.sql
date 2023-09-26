@@ -86,3 +86,20 @@ end;
 delimiter ;
 CALL sp_AdicionarLivro('Livro Palmeiras', 1, 1914, 300, 4, @resultado);
 SELECT @resultado;
+
+delimiter //
+
+CREATE PROCEDURE sp_AutorMaisAntigo(OUT AutorMaisAntigo VARCHAR(255))
+BEGIN
+	DECLARE data_nasc DATE;
+	SELECT MIN(Data_Nascimento) INTO data_nasc FROM Autor;
+	SELECT Nome INTO AutorMaisAntigo
+	FROM Autor
+	WHERE Data_Nascimento = data_nasc;
+END //
+
+delimiter ;
+
+CALL sp_AutorMaisAntigo(@AutorMaisAntigo);
+SELECT @AutorMaisAntigo;
+
