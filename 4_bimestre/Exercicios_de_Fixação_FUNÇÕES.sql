@@ -35,4 +35,20 @@ SELECT ABS(quantidade) AS quantidade_abs FROM produtos;
 
 SELECT AVG(preco) AS media FROM produtos;
 
+-- exercicio 3 --
+select * from eventos;
+create table eventos (
+	data_evento DATE
+);
 
+INSERT INTO eventos
+VALUES 
+	('1985-02-05'), ('1995-06-19'), ('2006-09-26');
+
+INSERT INTO eventos
+VALUES 
+	(NOW());
+
+SELECT DATEDIFF('2006-09-26','1995-06-19' ) as dias;
+
+SELECT data_evento,DAYNAME(data_evento) as dia_da_semana from eventos;
