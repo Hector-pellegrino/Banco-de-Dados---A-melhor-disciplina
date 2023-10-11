@@ -52,3 +52,20 @@ VALUES
 SELECT DATEDIFF('2006-09-26','1995-06-19' ) as dias;
 
 SELECT data_evento,DAYNAME(data_evento) as dia_da_semana from eventos;
+
+-- exercicio 4 --
+SELECT
+    produto,
+    quantidade,
+    IF(quantidade > 0, 'Em estoque', 'Fora de estoque') AS estoque
+FROM produtos;
+
+SELECT
+    produto,
+    preco,
+    CASE
+        WHEN preco <= 50.00 THEN 'Barato'
+        WHEN preco > 50.00 AND preco <= 100.00 THEN 'Médio'
+        ELSE 'Caro'
+    END AS categoria_de_preco
+FROM produtos;
