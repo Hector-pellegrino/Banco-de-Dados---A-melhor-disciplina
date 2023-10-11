@@ -94,3 +94,13 @@ SELECT
     quantidade,
     TOTAL_VALOR(preco, quantidade) AS total_valor
 FROM produtos;	
+
+-- exercicio 6 --
+
+SELECT COUNT(*) AS total_produtos FROM produtos;
+
+SELECT MAX(preco) AS maior_preco FROM produtos;
+
+SELECT MIN(preco) AS menor_preco FROM produtos;
+
+SELECT SUM(IF(quantidade > 0, quantidade, 0)) AS total_estoque FROM produtos;
