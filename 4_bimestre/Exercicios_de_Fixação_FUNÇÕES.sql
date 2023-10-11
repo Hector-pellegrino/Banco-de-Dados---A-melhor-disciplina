@@ -12,7 +12,12 @@ select upper(nome) from nomes;
 
 select length(nome) from nomes;
 
-select concat('Sr.', nome) as masculino from nomes where nome like '%o' ;
+select
+	case
+		WHEN nome LIKE '%a' THEN CONCAT('Sra. ', nome) 
+		ELSE CONCAT('Sr. ', nome)
+	end as Senhores_e_senhoras
+from nomes;
 
 -- exercicio 2 --
 
@@ -69,3 +74,23 @@ SELECT
         ELSE 'Caro'
     END AS categoria_de_preco
 FROM produtos;
+
+-- exercicio 5 --
+
+DELIMITER //
+
+CREATE FUNCTION TOTAL_VALOR (preco DECIMAL(6, 2), quantidade INT)
+RETURNS DECIMAL(8, 2)
+DETERMINISTIC
+BEGIN 
+    RETURN preco * quantidade;
+END;
+
+//
+
+SELECT
+    produto,
+    preco,
+    quantidade,
+    TOTAL_VALOR(preco, quantidade) AS total_valor
+FROM produtos;	
