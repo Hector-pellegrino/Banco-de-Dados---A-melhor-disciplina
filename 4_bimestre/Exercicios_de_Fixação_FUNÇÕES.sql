@@ -104,3 +104,66 @@ SELECT MAX(preco) AS maior_preco FROM produtos;
 SELECT MIN(preco) AS menor_preco FROM produtos;
 
 SELECT SUM(IF(quantidade > 0, quantidade, 0)) AS total_estoque FROM produtos;
+
+-- exercicio 7 --
+
+DELIMITER //
+
+CREATE FUNCTION FATORIAL(numero INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE resultado INT;
+    SET resultado = 1;
+    WHILE numero > 0 DO
+        SET resultado = resultado * numero;
+        SET numero = numero - 1;
+    END WHILE;
+    RETURN resultado;
+END;
+//
+DELIMITER ;
+-- testando --
+SELECT FATORIAL(5);
+
+
+DELIMITER //
+CREATE FUNCTION EXPONENCIAL(numero INT, expoente INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+	DECLARE resultado INT;
+    SET resultado = numero;
+    SET expoente = expoente - 1;
+    WHILE expoente > 0 DO
+		SET resultado = resultado * numero;
+        SET expoente = expoente - 1;
+	END WHILE;
+    RETURN RESULTADO;
+END;
+//
+DELIMITER ;
+-- testando --
+SELECT EXPONENCIAL(2,3);
+
+
+
+DELIMITER //
+
+CREATE FUNCTION PALINDROMO(palavra VARCHAR(50))
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE palavra_invertida VARCHAR(100);
+    SET palavra_invertida = REVERSE(palavra);
+    IF palavra = palavra_invertida THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END;
+//
+
+DELIMITER ;
+-- testando --
+select PALINDROMO('joao')
