@@ -1,0 +1,38 @@
+-- exercicio 1 --
+
+DELIMITER //
+
+CREATE FUNCTION total_livros_por_genero(genero VARCHAR(255)) 
+RETURNS INT 
+DETERMINISTIC
+BEGIN
+	DECLARE done INT DEFAULT FALSE;
+    DECLARE livro_id INT;
+    DECLARE total INT;
+    
+    DECLARE cursor_livros CURSOR FOR
+	SELECT Livro.id
+	FROM Livro
+	INNER JOIN Genero ON Livro.id_genero = Genero.id
+	WHERE Genero.nome_genero = genero;
+    
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    SET total = 0;
+    OPEN cursor_livros;
+    livros_loop: LOOP
+        FETCH cursor_livros INTO livro_id;
+        IF done THEN
+            LEAVE livros_loop;
+        END IF;
+        
+        SET total = total + 1;
+    END LOOP;
+    
+    CLOSE cursor_livros;
+    
+    RETURN total;
+END//
+
+DELIMITER ;
+
+SELECT total_livros_por_genero('História');
