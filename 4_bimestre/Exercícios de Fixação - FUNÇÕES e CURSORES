@@ -6,7 +6,7 @@ CREATE FUNCTION total_livros_por_genero(genero VARCHAR(255))
 RETURNS INT 
 DETERMINISTIC
 BEGIN
-	DECLARE done INT DEFAULT FALSE;
+    DECLARE done BOOLEAN DEFAULT FALSE;
     DECLARE livro_id INT;
     DECLARE total INT;
     
@@ -16,7 +16,7 @@ BEGIN
 	INNER JOIN Genero ON Livro.id_genero = Genero.id
 	WHERE Genero.nome_genero = genero;
     
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
     SET total = 0;
     OPEN cursor_livros;
     livros_loop: LOOP
@@ -36,3 +36,42 @@ END//
 DELIMITER ;
 
 SELECT total_livros_por_genero('História');
+
+-- exercicio 2 --
+
+DELIMITER //
+
+CREATE FUNCTION listar_livros_por_autor(primeiro_nome VARCHAR(150), ultimo_nome VARCHAR(150))
+RETURNS VARCHAR(1000)
+DETERMINISTIC
+BEGIN
+    DECLARE lista_titulos VARCHAR(1000) DEFAULT '';
+    DECLARE done BOOLEAN DEFAULT FALSE;
+    DECLARE livro_titulo VARCHAR(150);
+    
+    DECLARE cursor_livro_autor CURSOR FOR
+        SELECT Livro_Autor.id_livro
+        FROM Livro_Autor
+        INNER JOIN Autor ON Livro_Autor.id_autor = Autor.id
+        WHERE Autor.primeiro_nome = primeiro_nome AND Autor.ultimo_nome = ultimo_nome;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    OPEN cursor_livro_autor;
+    livro_autor_loop: LOOP
+        FETCH cursor_livro_autor INTO livro_titulo;
+        IF done THEN
+            LEAVE livro_autor_loop;
+        END IF;
+        
+        SELECT titulo INTO livro_titulo FROM Livro WHERE id = livro_titulo;
+        SET lista_titulos = CONCAT(lista_titulos, livro_titulo, ',');
+    END LOOP;
+    
+    CLOSE cursor_livro_autor;
+    
+    RETURN lista_titulos;
+END//
+
+DELIMITER ;
+
+SELECT listar_livros_por_autor('Maria', 'Fernandes');
