@@ -35,7 +35,8 @@ END//
 
 DELIMITER ;
 
-SELECT total_livros_por_genero('História');
+-- testando --
+SELECT total_livros_por_genero('Romance');
 
 -- exercicio 2 --
 
@@ -74,4 +75,48 @@ END//
 
 DELIMITER ;
 
+-- testando --
 SELECT listar_livros_por_autor('Maria', 'Fernandes');
+
+ -- exercicio 3 --
+ 
+DELIMITER //
+
+CREATE FUNCTION atualizar_resumos()
+RETURNS VARCHAR(100)
+DETERMINISTIC
+BEGIN
+    DECLARE done BOOLEAN DEFAULT FALSE;
+    DECLARE livro_id INT;
+    DECLARE resumo_novo VARCHAR(200);
+    DECLARE feito VARCHAR(100) DEFAULT '';
+    
+    DECLARE cursor_resumo_livro CURSOR FOR
+        SELECT id, resumo FROM Livro;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    OPEN cursor_resumo_livro;
+    resumo_loop: LOOP
+        FETCH cursor_resumo_livro INTO livro_id, resumo_novo;
+        IF done THEN
+			SET feito = CONCAT('FEITO');
+            LEAVE resumo_loop;
+        END IF;
+        
+        SET resumo_novo = CONCAT(resumo_novo, ' Este é um excelente livro!');
+        
+        UPDATE Livro
+        SET resumo = resumo_novo
+        WHERE id = livro_id;
+    END LOOP;
+    
+    CLOSE cursor_resumo_livro;
+    
+    RETURN feito;
+END//
+
+DELIMITER ;
+
+-- testando --
+SELECT atualizar_resumos();
+SELECT resumo FROM Livro;
