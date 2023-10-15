@@ -166,3 +166,44 @@ DELIMITER ;
 
 -- testando --
 SELECT media_livros_por_editora();
+
+-- exercicio 5 --
+
+DELIMITER //
+
+CREATE FUNCTION autores_sem_livros()
+RETURNS VARCHAR(1000)
+DETERMINISTIC
+BEGIN
+    DECLARE done BOOLEAN DEFAULT FALSE;
+    DECLARE contagem_autor INT;
+    DECLARE lista_autores VARCHAR(1000) DEFAULT '';
+
+    DECLARE cursor_autor CURSOR FOR
+        SELECT id FROM Autor;
+        
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    OPEN cursor_autor;
+    autor_loop: LOOP
+        FETCH cursor_autor INTO contagem_autor;
+        IF done THEN
+            LEAVE autor_loop;
+        END IF;
+        IF (SELECT COUNT(*) FROM Livro_Autor WHERE id_autor = contagem_autor) = 0 THEN
+            SET lista_autores = CONCAT(lista_autores, (SELECT CONCAT(primeiro_nome, ultimo_nome) FROM Autor WHERE id = contagem_autor), ',');
+        END IF;
+    END LOOP;
+    
+    CLOSE cursor_autor;
+    
+    RETURN lista_autores;
+END//
+
+DELIMITER ;
+
+-- testando --
+INSERT INTO Autor (primeiro_nome, ultimo_nome, data_nascimento, nacionalidade) VALUES
+('Cristiano', 'Ronaldo', '1985-02-05', 'Português'),
+('Raphael', 'Veiga', '1995-06-19', 'Brasileiro');
+SELECT autores_sem_livros();
