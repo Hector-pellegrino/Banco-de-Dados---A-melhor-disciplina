@@ -94,7 +94,7 @@ BEGIN
     DECLARE cursor_resumo_livro CURSOR FOR
         SELECT id, resumo FROM Livro;
     
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
     OPEN cursor_resumo_livro;
     resumo_loop: LOOP
         FETCH cursor_resumo_livro INTO livro_id, resumo_novo;
@@ -120,3 +120,49 @@ DELIMITER ;
 -- testando --
 SELECT atualizar_resumos();
 SELECT resumo FROM Livro;
+
+-- exercicio 4 --
+
+DELIMITER //
+
+CREATE FUNCTION media_livros_por_editora()
+RETURNS DECIMAL(6,2)
+DETERMINISTIC
+BEGIN
+    DECLARE done BOOLEAN DEFAULT FALSE;
+    DECLARE t_livro INT DEFAULT 0;
+    DECLARE t_editora INT DEFAULT 0;
+    DECLARE media_livros_por_editora DECIMAL(6,2) DEFAULT 0;
+    
+    DECLARE cursor_editora CURSOR FOR
+        SELECT id FROM Editora;
+    
+	DECLARE cursor_livro CURSOR FOR
+	    SELECT COUNT(*)
+	    FROM Livro
+	    WHERE id_editora = t_editora;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    OPEN cursor_editora;
+    editora_loop: LOOP
+        FETCH cursor_editora INTO t_editora;
+        IF done THEN
+            LEAVE editora_loop;
+        END IF;
+        
+        OPEN cursor_livro;
+        FETCH cursor_livro INTO t_livro;
+        CLOSE cursor_livro;
+        
+        SET media_livros_por_editora = media_livros_por_editora + (t_livro / (SELECT COUNT(*) FROM Editora));
+    END LOOP;
+    
+    CLOSE cursor_editora;
+    
+    RETURN media_livros_por_editora;
+END//
+
+DELIMITER ;
+
+-- testando --
+SELECT media_livros_por_editora();
